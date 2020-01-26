@@ -12,37 +12,42 @@ body {
     font-size: 1.6rem;
 }
 
+
 #app,
 #app .error-wrapper {
-    width: 100vw;
-    height: 100vh;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 #app .app-container {
     line-height: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 #app .error-wrapper {
-    position: fixed;
+    margin: 10px;
     top: 0;
     left: 0;
 }
 
-#app .heading,
+#app .header,
 #app .message {
-    position: fixed;
+    display: flex;
+    flex-flow: row;
     left: 0;
     width: 100vw;
-    text-align: center;
+    align-items: center;
+    justify-content: center;
     line-height: initial;
 }
 
-#app .heading {
-    top: 0;
+#app .header {
+
 }
 
 #app .message {
