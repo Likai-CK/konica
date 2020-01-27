@@ -22,12 +22,14 @@ The Client will listen for changes in game state (such as inactivity) and receiv
 */
  
 'use strict';
-// By waiting for the document to fully load, we can reference all elements without them being null.
-window.addEventListener("load", start_client);
 
+window.addEventListener("load", start_client); // By waiting for the document to fully load, we can reference all elements without them being null.
+document.getElementById("app-container").addEventListener("click", handle_click); // This will intercept all clicks within the app container.
+
+// This will initialize everything we want done AFTER the page first loads.
 function start_client(){
-var message_output = document.getElementById('app').getElementsByClassName("message")[0]; // This will be a text field to output to underneath our game.
-var header_output = document.getElementById('app').getElementsByClassName("header")[0];
+var message_output = document.getElementById("app").getElementsByClassName("message")[0]; // This will be a text field to output to underneath our game.
+var header_output = document.getElementById("app").getElementsByClassName("header")[0];
 
 console.log(message_output);
 console.log(header_output);
@@ -43,3 +45,15 @@ app.ports.request.subscribe((message) => {
     });
 
 } // end of start_client
+
+// This will collect the exact object being clicked on in the app, and let us process it.
+// https://stackoverflow.com/questions/33846813/typescript-how-to-check-tagname-in-eventtarget
+function handle_click(e){ 
+ console.log(e.target); 
+ if (e.target["tagName"] === ('circle')){
+     console.log("CIRCLE");
+ } else {
+     console.log("not a circle");
+ }
+
+}
