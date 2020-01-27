@@ -25,7 +25,7 @@ The Client will listen for changes in game state (such as inactivity) and receiv
 
 window.addEventListener("load", start_client); // By waiting for the document to fully load, we can reference all elements without them being null.
 document.getElementById("app-container").addEventListener("click", handle_click); // This will intercept all clicks within the app container.
-
+var event_to_report = false; 
 // This will initialize everything we want done AFTER the page first loads.
 function start_client(){
 var message_output = document.getElementById("app").getElementsByClassName("message")[0]; // This will be a text field to output to underneath our game.
@@ -38,9 +38,11 @@ message_output.textContent = "ASKSDBFHJ";
 header_output.textContent = "Technical Assessment";
 console.log("HI");
 app.ports.request.subscribe((message) => {
-    message = JSON.parse(message);
+    message = JSON.parse(message); // we will receive a JSON object and will parse it.
+    response = handle_response(message); // response will be a JSON object complying with the specification.
+
     // Parse the message to determine a response, then respond:
-    //app.ports.response.send(JSON.stringify(message));
+    app.ports.response.send(JSON.stringify(response));
     message_output = message; // keep the text field updated with response information.
     });
 
@@ -48,6 +50,7 @@ app.ports.request.subscribe((message) => {
 
 // This will collect the exact object being clicked on in the app, and let us process it.
 // https://stackoverflow.com/questions/33846813/typescript-how-to-check-tagname-in-eventtarget
+// There is NO type safety in this version, but it is shorter and OK for this assignment.
 function handle_click(e){ 
  console.log(e.target); 
  if (e.target["tagName"] === ('circle')){
@@ -55,5 +58,10 @@ function handle_click(e){
  } else {
      console.log("not a circle");
  }
+
+}
+
+// Takes in parsed JSON object, returns a new JSON object to send back to the server.
+function handle_response(message){
 
 }

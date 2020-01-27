@@ -12,39 +12,41 @@ body {
     font-size: 1.6rem;
 }
 
-
 #app,
 #app .error-wrapper {
-    margin-top: 15%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-flow: row nowrap;
     justify-content: center;
+    align-items: center;
 }
 
 #app .app-container {
     line-height: 0;
-    margin-top: 25px;
-    margin-bottom: 25px;
 }
 
 #app .error-wrapper {
+    position: fixed;
     top: 0;
     left: 0;
 }
 
-#app .header,
+#app .heading,
 #app .message {
-
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    text-align: center;
     line-height: initial;
 }
 
-#app .header {
-    white-space: nowrap;
+#app .heading {
+    top: 0;
 }
 
 #app .message {
-    white-space: nowrap;
+    bottom: 0;
 }
 
 #app .error {
