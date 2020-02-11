@@ -45,6 +45,7 @@ exports.testLogic = function(msg, logic_module){
 
 // We don't really want to be calling this directly from server.js since it's internally used, so we won't export it. 
 // All functions will return a JSON string for sending out to client.
+// We don't care about the ID or body for starting a new game.
 function startgame(json, logic_module){
     var response_payload = {};
     response_payload["id"] = 1;

@@ -26,31 +26,20 @@ var app = express();
 var expressWs = require('express-ws')(app);
 const message_handler = require('./message_handler.js'); // load the message handler module
 const logic_handler = require('./logic_handler.js'); // load the logic handler module
-
-app.use(function (req, res, next) {
-    console.log('middleware');
-    req.testing = 'testing';
-    return next();
-  });
-   
-  app.get('/', function(req, res, next){
-    console.log('get route', req.testing);
-    res.end();
-  });
    
   app.ws('/', function(ws, req) {
     ws.on('message', function(msg) { // on message receipt
-      console.log(msg);
+      console.log("CLIENT: " + msg);
       response = message_handler.handle(JSON.parse(msg), logic_handler); // send the message to the message handler as JSON, get a response.
       // The message handler is being sent the message AND a reference to the logic handler module.
       // By doing this, the message handler can interact with the logic handler module and keep track of game state.
-      console.log("RESPONSE: " + response);
+      console.log("SERVER: " + response);
       if(response){
         ws.send(response);
+        response = null; // Just in case, let's empty this. 
       }
       
     });
-    console.log('socket', req.testing);
   });
    
   app.listen(port); // open the port and listen.
