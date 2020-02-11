@@ -25,9 +25,42 @@ Incoming Messages (Request Handling):
 
 */
 
-exports.handle = function(msg, logic_module){
-    return msg;
+// Take the message from the server, figure out what it is, and act accordingly. Return a response.
+// input is expected to be formatted as a JSON array. Might add automatic conversion later.
+exports.handle = function(json, logic_module){
+    var message = json["msg"];
+    if(message == "INITIALIZE"){
+        return startgame(json, logic_module);
+    } else if(message == "NODE_CLICKED"){
+        return nodeclick(json, logic_module);
+    } else if(message == "ERROR"){
+        return errorhandle(json, logic_module);
+    }
+    console.log(message);
+    return false;
 };
 exports.testLogic = function(msg, logic_module){
     return logic_module.test();
+}
+
+// We don't really want to be calling this directly from server.js since it's internally used, so we won't export it. 
+// All functions will return a JSON string for sending out to client.
+function startgame(json, logic_module){
+    var response_payload = {};
+    response_payload["id"] = 1;
+    response_payload["msg"] = "INITIALIZE";
+    response_payload["body"] = {
+        "newLine": null,
+        "heading": "Player 1",
+        "message": "Awaiting Player 1's Move"
+    }
+    
+    return JSON.stringify(response_payload);
+}
+
+function nodeclick(json, logic_module){
+    return false;
+}
+function errorhandle(json, logic_module){
+    return false;
 }

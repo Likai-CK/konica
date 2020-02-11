@@ -41,10 +41,14 @@ app.use(function (req, res, next) {
   app.ws('/', function(ws, req) {
     ws.on('message', function(msg) { // on message receipt
       console.log(msg);
-      response = message_handler.testLogic(msg, logic_handler); // send the message to the message handler, get a response.
+      response = message_handler.handle(JSON.parse(msg), logic_handler); // send the message to the message handler as JSON, get a response.
       // The message handler is being sent the message AND a reference to the logic handler module.
       // By doing this, the message handler can interact with the logic handler module and keep track of game state.
-
+      console.log("RESPONSE: " + response);
+      if(response){
+        ws.send(response);
+      }
+      
     });
     console.log('socket', req.testing);
   });

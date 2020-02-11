@@ -10,9 +10,15 @@ This module contains all functions necessary to maintain the game state.
 
 */
 
-var counter = 0;
+var click_number = 0; // none clicked, first click, or second click?
+
 
 exports.test = function() {
-    counter += 1;
     console.log(counter);
+};
+
+// newgame will reset all game logic to default state.
+exports.newgame = function() {
+    click_number = 0;
+    return true;
 };
