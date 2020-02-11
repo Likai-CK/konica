@@ -47,6 +47,8 @@ exports.testLogic = function(msg, logic_module){
 // All functions will return a JSON string for sending out to client.
 // We don't care about the ID or body for starting a new game.
 function startgame(json, logic_module){
+    logic_module.newgame(); // get all logic reset.
+    // cookie cutter response for the client to start.
     var response_payload = {};
     response_payload["id"] = 1;
     response_payload["msg"] = "INITIALIZE";
@@ -60,8 +62,15 @@ function startgame(json, logic_module){
 }
 
 function nodeclick(json, logic_module){
-    return false;
+    var response = "";
+    if(logic_module.click_number == 1){ // if first click (start node)
+
+    } else if(logic_module.click_number == 2){ // if second click (end node)
+
+    }
+    return response;
 }
 function errorhandle(json, logic_module){
-    return false;
+    var response = "";
+    return response;
 }
