@@ -10,6 +10,9 @@ This module contains all functions necessary to maintain the game state.
 
 */
 
+var counter = 0;
+
 exports.test = function() {
-    console.log("Yup, this worked.");
+    counter += 1;
+    console.log(counter);
 };
