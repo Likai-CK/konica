@@ -1,11 +1,16 @@
 {
-  "name": "src",
+  "name": "server",
   "version": "1.0.0",
-  "description": "A Konica Minolta Coding Challenge",
-  "main": "index.js",
+  "description": "A game server for Konica Minolta",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Christopher Kelly",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0"
+  }
 }

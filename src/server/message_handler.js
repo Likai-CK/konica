@@ -24,3 +24,7 @@ Incoming Messages (Request Handling):
 
 
 */
+
+exports.handle = function(msg){
+    return msg;
+}

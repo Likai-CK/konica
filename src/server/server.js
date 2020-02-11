@@ -14,4 +14,34 @@ Separating the functionality into these components allows for some modularity an
 
 */
 
-var port = 8081;
+// Every Server starts with opening a port. The client is setup to connect to Port 8081 over WebSocket
+// https://javascript.info/websocket
+// https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm
+// https://www.npmjs.com/package/express-ws
+// https://expressjs.com/en/guide/using-middleware.html
+
+var express = require('express');
+var app = express();
+var expressWs = require('express-ws')(app);
+const message_handler = require('./message_handler.js'); // load the message handler module
+
+app.use(function (req, res, next) {
+    console.log('middleware');
+    req.testing = 'testing';
+    return next();
+  });
+   
+  app.get('/', function(req, res, next){
+    console.log('get route', req.testing);
+    res.end();
+  });
+   
+  app.ws('/', function(ws, req) {
+    ws.on('message', function(msg) { // on message receipt
+      console.log(msg);
+      response = message_handler.handle(msg); // send the message to the message handler, get a response.
+    });
+    console.log('socket', req.testing);
+  });
+   
+  app.listen(8081);
