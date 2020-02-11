@@ -27,4 +27,7 @@ Incoming Messages (Request Handling):
 
 exports.handle = function(msg){
     return msg;
+};
+exports.testLogic = function(logic_module){
+    return logic_module.test();
 }

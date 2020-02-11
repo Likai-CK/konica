@@ -19,11 +19,14 @@ Separating the functionality into these components allows for some modularity an
 // https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm
 // https://www.npmjs.com/package/express-ws
 // https://expressjs.com/en/guide/using-middleware.html
+// https://hype.codes/how-include-js-file-another-js-file
 
+var port = 8081;
 var express = require('express');
 var app = express();
 var expressWs = require('express-ws')(app);
 const message_handler = require('./message_handler.js'); // load the message handler module
+const logic_handler = require('./logic_handler.js'); // load the logic handlerm module
 
 app.use(function (req, res, next) {
     console.log('middleware');
@@ -40,8 +43,9 @@ app.use(function (req, res, next) {
     ws.on('message', function(msg) { // on message receipt
       console.log(msg);
       response = message_handler.handle(msg); // send the message to the message handler, get a response.
+      message_handler.testLogic(logic_handler);
     });
     console.log('socket', req.testing);
   });
    
-  app.listen(8081);
+  app.listen(port); // open the port and listen.

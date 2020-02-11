@@ -9,3 +9,7 @@ This module contains all functions necessary to maintain the game state.
 
 
 */
+
+exports.test = function() {
+    console.log("Yup, this worked.");
+};
