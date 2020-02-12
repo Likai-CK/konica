@@ -22,18 +22,22 @@ exports.newgame = function() {
     click_number = 1;
     id = 1;
     lines = [];
+    active_player = 1;
     points_clicked = [];
     gameover = false;
     return true;
 };
 
-//Takes a JSON array containing "x":INTEGER and "y":INTEGER
-//Updates game state with current click information, returns validity of click.
+//Takes a JSON array containing a point as [x,y]
+//Updates game state with current click information, returns validity of click and what happened as a STRING.
 exports.nodeclick = function(point) {
+    console.log("CLICK!");
+    console.log(point);
+    console.log(points_clicked);
     id += 1;
     // first click
     if(click_number == 1){
-        points_clicked.push([point["x"],point["y"]]); // add the clicked node to the buffer.
+        points_clicked.push(point); // add the clicked node to the buffer.
         click_number += 1; // add a click.
         if(valid_start_node()){
             return "VALID_START_NODE";
@@ -44,11 +48,12 @@ exports.nodeclick = function(point) {
     }
     //second click
     else if(click_number == 2){
-        points_clicked.push([point["x"],point["y"]]);
+        points_clicked.push(point);
         click_number = 1; // reset the click to 1 for the next one.
         if(valid_end_node()){
-            lines.push([points_clicked[0],points_clicked[1]]); // add a new line to the list of lines.
+            lines.unshift([points_clicked[0],points_clicked[1]]); // add a new line to the list of lines at index 0, consisting of the two points we just collected.
             points_clicked = []; //empty the points_clicked buffer
+            swap_players(); // this will swap the active player.
             return "VALID_END_NODE";
         } else 
             points_clicked = []; //empty the points_clicked buffer
@@ -67,9 +72,22 @@ exports.getid = function() {
 exports.getplayer = function() {
     return active_player;
 }
+
+// returns the last line created in [[x,y],[x,y]] format.
+exports.getlastline = function() {
+    return lines[0];
+}
 function valid_start_node(){
     return true; // add logic later
 }
 function valid_end_node(){
     return true; // add logic later
 };
+
+// this will change the player from one to the next.
+function swap_players(){
+    if(active_player == 1)
+        active_player = 2;
+    else if(active_player == 2)
+        active_player = 1;
+}

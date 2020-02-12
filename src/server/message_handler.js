@@ -48,8 +48,8 @@ function startgame(json, logic_module){
 function nodeclick(json, logic_module){
     var response_payload = {};
     var point = [json["body"]["x"],json["body"]["y"]]; // This will create an array containing the point in the message as [x,y], for the logic handler.
-    var current_player = logic_module.getplayer(); // This will get the current player number, so we can output it accordingly.
     node_click = logic_module.nodeclick(point); // this will return whether it is valid, and what kind of click it was as a STRING.
+    var current_player = logic_module.getplayer(); // This will get the current player number, so we can output it accordingly.
     console.log(node_click);
     if(node_click == "VALID_START_NODE"){
         response_payload["id"] = logic_module.getid();
@@ -59,11 +59,55 @@ function nodeclick(json, logic_module){
             "heading": "Player " + current_player,
             "message": "Select a second node!"
         }
+    } else if(node_click == "INVALID_START_NODE"){
+        response_payload["id"] = logic_module.getid();
+        response_payload["msg"] = node_click;
+        response_payload["body"] = {
+            "newLine": null,
+            "heading": "Player " + current_player,
+            "message": "Try again, that was invalid!"
+        }
+    } else if(node_click == "VALID_END_NODE"){
+        response_payload["id"] = logic_module.getid();
+        response_payload["msg"] = node_click;
+        response_payload["body"] = {
+            "newLine": format_newLine(logic_module.getlastline()),
+            "heading": "Player " + current_player,
+            "message": null
+        }
+    } else if(node_click == "INVALID_END_NODE"){
+        response_payload["id"] = logic_module.getid();
+        response_payload["msg"] = node_click;
+        response_payload["body"] = {
+            "newLine": null,
+            "heading": "Player " + current_player,
+            "message": "Invalid 2nd node, try choosing again!"
+        } 
     }
     return JSON.stringify(response_payload); 
 }
 function errorhandle(json, logic_module){
     var response = "";
     return response;
+}
+
+// Takes in a line formed by two points [[x,y],[x,y]] and returns the appropriate JSON array for communication.
+function format_newLine(line){
+    var start_x = line[0][0];
+    var start_y = line[0][1];
+    var end_x = line[1][0];
+    var end_y = line[1][1];
+    var formatted = {
+        "start": {
+            "x": start_x,
+            "y": start_y
+        },
+        "end": {
+            "x": end_x,
+            "y": end_y
+        }
+    };
+    return formatted;
+
 }
 
