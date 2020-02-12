@@ -13,7 +13,6 @@ var points_clicked = []; // This will be a buffer to store the first point click
 var gameover = false; // is the game over yet?
 var active_player = 1; // is player 1 or 2 currently playing?
 var start_node = []; // keep track of the start node so we don't do a million array slices later on to find it over and over
-var first_node_chosen = false; // keep track of when the first node has been clicked
 var playing_area_x = 3; // max x size allowed ( start at 0 )- anything else will be INVALID. Only possible if client is modified or weird stuff happens.
 var playing_area_y = 3; // max y size allowed ( start at 0 )- anything else will be INVALID. Only possible if client is modified or weird stuff happens.
 
@@ -35,11 +34,11 @@ exports.newgame = function() {
 //Takes a JSON array containing a point as [x,y]
 //Updates game state with current click information, returns validity of click and what happened as a STRING.
 exports.nodeclick = function(point) {
-    console.log("CLICK!");
-    console.log(point);
-    console.log(points_clicked);
-    console.log(lines);
-    console.log(start_node);
+    //console.log("CLICK!");
+    //console.log(point);
+    //console.log(points_clicked);
+    //console.log(lines);
+    //console.log(start_node);
     id += 1;
     // first click
     if(click_number == 1){
@@ -47,8 +46,7 @@ exports.nodeclick = function(point) {
         
         if(valid_start_node(point)){
             click_number += 1; // add a click.
-            if(!(first_node_chosen)){ // If this is the first node to be chosen
-                first_node_chosen = true; // just set this flag for us.
+            if(lines.length == 0){ // If this is the first node to be chosen
                 start_node = point; // set the start node to this node, so we aren't slicing for it later.
             }
             points_clicked.push(point); // add the clicked node to the buffer.
@@ -96,16 +94,17 @@ exports.getlastline = function() {
 // start at the first or last node [we will keep an array of all nodes directly visited]
 // first line may begin anywhere WITHIN THE PLAYING AREA.
 function valid_start_node(point){
+    console.log(point);
+    console.log(start_node);
+    console.log(pointsEqual(point, start_node));
     if(out_of_bounds(point)){ // If it's out of bounds, it's invalid.
         return false;
     }
-    if(!first_node_chosen){ // If this is the first node, return true.
-        console.log("AAAA");
-        console.log(lines);
+    if(lines.length == 0){ // If there are no lines yet, this is the first node. Return true.
         return true;
-    } else if (lines[0][1] == point){ // If the end of the last line is clicked
+    } else if (pointsEqual(lines[0][1],point)){ // If the end of the last line is clicked
         return true;
-    } else if (point == start_node){ // If the start node is clicked
+    } else if (pointsEqual(point, start_node)){ // If the start node is clicked
         return true;
     }
 
@@ -140,4 +139,13 @@ function out_of_bounds(point){
         return true; // Out of bounds!
     } else
         return false; // Not out of bounds!
+}
+
+// Check if two arrays (points) are equal. Fixes an issue with ==.
+function pointsEqual(point1, point2){
+    if(point1[0] != point2[0])
+        return false;
+    if(point1[1] != point2[1])
+        return false;
+    return true;
 }
