@@ -25,7 +25,7 @@ Incoming Messages (Request Handling):
 
 */
 
-// Take the message from the server, figure out what it is, and act accordingly. Return a response.
+// Take the message from the server, figure out what it is, and act accordingly. Return a response as STRING.
 // input is expected to be formatted as a JSON array. Might add automatic conversion later.
 exports.handle = function(json, logic_module){
     var message = json["msg"];
@@ -62,15 +62,24 @@ function startgame(json, logic_module){
 }
 
 function nodeclick(json, logic_module){
-    var response = "";
-    if(logic_module.click_number == 1){ // if first click (start node)
-
-    } else if(logic_module.click_number == 2){ // if second click (end node)
-
+    var response_payload = {};
+    var point = [json["body"]["x"],json["body"]["y"]]; // This will create an array containing the point in the message as [x,y], for the logic handler.
+    var current_player = logic_module.getplayer(); // This will get the current player number, so we can output it accordingly.
+    node_click = logic_module.nodeclick(point); // this will return whether it is valid, and what kind of click it was as a STRING.
+    console.log(node_click);
+    if(node_click == "VALID_START_NODE"){
+        response_payload["id"] = logic_module.getid();
+        response_payload["msg"] = node_click;
+        response_payload["body"] = {
+            "newLine": null,
+            "heading": "Player " + current_player,
+            "message": "Select a second node!"
+        }
     }
-    return response;
+    return JSON.stringify(response_payload); 
 }
 function errorhandle(json, logic_module){
     var response = "";
     return response;
 }
+
