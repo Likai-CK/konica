@@ -94,9 +94,9 @@ exports.getlastline = function() {
 // start at the first or last node [we will keep an array of all nodes directly visited]
 // first line may begin anywhere WITHIN THE PLAYING AREA.
 function valid_start_node(point){
-    console.log(point);
-    console.log(start_node);
-    console.log(pointsEqual(point, start_node));
+    //console.log(point);
+    //console.log(start_node);
+    //console.log(pointsEqual(point, start_node));
     if(out_of_bounds(point)){ // If it's out of bounds, it's invalid.
         return false;
     }
@@ -119,6 +119,11 @@ function valid_start_node(point){
 function valid_end_node(point){
     if(out_of_bounds(point)){ // If it's out of bounds, it's invalid.
         return false;
+    } else if(point == points_clicked[0]){ // cannot select the same node as the first.
+        return false;    
+    }else if(check_all_intersects(points_clicked[0], point)){ // If theres an intersect somewhere....
+        console.log("LINE INTERSECTS!")
+        return false; // line intersects.
     }
     return true; // add logic later
 };
@@ -149,3 +154,48 @@ function pointsEqual(point1, point2){
         return false;
     return true;
 }
+
+//https://www.tutorialspoint.com/Check-if-two-line-segments-intersect
+// https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-intersect
+// https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
+// returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
+// Check the direction these three points rotate
+function intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
+    var a_dx = x2 - x1;
+    var a_dy = y2 - y1;
+    var b_dx = x4 - x3;
+    var b_dy = y4 - y3;
+    var s = (-a_dy * (x1 - x3) + a_dx * (y1 - y3)) / (-b_dx * a_dy + a_dx * b_dy);
+    var t = (+b_dx * (y1 - y3) - b_dy * (x1 - x3)) / (-b_dx * a_dy + a_dx * b_dy);
+    return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
+}
+  // This will peruse through all of the lines already made in the game (in lines array)
+  // and see if the new line being suggested intersects with any of them.
+  // Returns false if no intersections.
+  function check_all_intersects(point1,point2){
+      if(lines.length == 0){ // if there's no lines, there's no intersections. 
+          return false;
+      } else if(points_clicked.length < 0){
+          return false; // 
+      }
+      console.log("INTERSECT TEST");
+      console.log(point1[0]);
+      console.log(point1[1]);
+      console.log(point2[0]);
+      console.log(point2[1]);
+      console.log(lines[0][0][0]);
+      console.log(lines[0][0][1]);
+      console.log(lines[0][1][0]);
+      console.log(lines[0][1][1]);
+      
+        // check all lines for intersect.
+        //console.log(lines[i]);
+        for(i = 0; i < lines.length; i++){
+            if(intersects(point1[0],point1[1], point2[0], point2[1], lines[i][0][0], lines[i][0][1], lines[i][1][0], lines[i][1][1])){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+  }
