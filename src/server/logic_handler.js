@@ -9,7 +9,7 @@ This module contains all functions necessary to maintain the game state.
 var click_number = 1; // first click, or second click?
 var id = 1; // We start the game off at 1. The client should always be sending a message with an ID above this. If not, resend missed messages.
 var lines = []; // Array containing all lines drawn already (two points).
-var points_clicked = []; // This will be a buffer to store the first point clicked, as [x,y].
+var points_clicked = []; // This will be a buffer to store the first two points clicked, as [x,y].
 var gameover = false; // is the game over yet?
 var active_player = 1; // is player 1 or 2 currently playing?
 var start_node = []; // keep track of the start node so we don't do a million array slices later on to find it over and over
@@ -52,7 +52,6 @@ exports.nodeclick = function(point) {
             points_clicked.push(point); // add the clicked node to the buffer.
             return "VALID_START_NODE";
         } else {
-            points_clicked = []
             return "INVALID_START_NODE";
         }
     }
@@ -68,7 +67,6 @@ exports.nodeclick = function(point) {
             swap_players(); // this will swap the active player.
             return "VALID_END_NODE";
         } else 
-            points_clicked = []; //empty the points_clicked buffer
             return "INVALID_END_NODE";
     }
     points_clicked = [];
@@ -161,8 +159,8 @@ function pointsEqual(point1, point2){
 // returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
 // Check the direction these three points rotate
 function intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
-    var a_dx = x2 - x1;
-    var a_dy = y2 - y1;
+    var a_dx = x2 - (x1-0.01);
+    var a_dy = y2 - (y1-0.01);
     var b_dx = x4 - x3;
     var b_dy = y4 - y3;
     var s = (-a_dy * (x1 - x3) + a_dx * (y1 - y3)) / (-b_dx * a_dy + a_dx * b_dy);
@@ -175,7 +173,7 @@ function intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
   function check_all_intersects(point1,point2){
       if(lines.length == 0){ // if there's no lines, there's no intersections. 
           return false;
-      } else if(points_clicked.length < 0){
+      } else if(points_clicked.length == 0){
           return false; // 
       }
       console.log("INTERSECT TEST");
